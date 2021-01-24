@@ -97,16 +97,17 @@ def change(X, firefly_matrix):
             
         if (valueF(Fi) < valueF(Fj)):
             # Fi の代わりに firefly_matrix の半分を更新する
-            for j in range(N):
-                firefly_matrix[i][j] = move_x(Fi[j], Fj[j])
+            for j in range(firefly):
+                for k in range(N):
+                    firefly_matrix[j][k] = move_x(Fi[k], Fj[k])
 
         else:
             for j in range(N):
                 firefly_matrix[i][j] = X[i][j]
-        '''
+        
         for j in range(N):
             firefly_matrix[i+1][j] = X[i+1][j]
-        '''   
+          
 
     return firefly_matrix
 
@@ -115,11 +116,11 @@ def change(X, firefly_matrix):
 # X を改善
 def recreate_x(X, firefly_matrix):
     X = firefly_matrix
-
+    
     for i in range(1, firefly, 2):
         for j in range(N):
             X[i][j] = np.array([rd.uniform(-1, 1)])
-
+    
     return X
             
 
@@ -152,7 +153,15 @@ if __name__ == '__main__':
 
         X = recreate_x(X, firefly_matrix)
 
-        pos = best_sol(firefly_matrix, pos)
+        pos_tmp = best_sol(firefly_matrix, pos)
+
+        if (valueF(pos) > valueF(pos_tmp)):
+            pos = pos_tmp
+
+        print(valueF(pos))
+    
+    print(pos)
+            
 
         
     
